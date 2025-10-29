@@ -1,0 +1,7 @@
+services:
+  webpush:
+    build:
+      context: .
+      dockerfile: ./images/websocket/Dockerfile
+    ports:
+      - "8081:8081"
