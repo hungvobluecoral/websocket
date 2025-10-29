@@ -10,24 +10,24 @@ wss.on('connection', (ws) => {
         try {
             const data = JSON.parse(msg);
 
-            // if (!data.restaurantId) {
+            // if (!data.restaurant_id) {
             //     console.log('❌ Client not registered. Closing connection.');
             //     ws.close();
             //     return;
             // }
 
-            if (data.restaurantId) {
-                clients[data.restaurantId] = clients[data.restaurantId] || [];
-                if (!clients[data.restaurantId].includes(ws)) {
-                    clients[data.restaurantId].push(ws);
+            if (data.restaurant_id) {
+                clients[data.restaurant_id] = clients[data.restaurant_id] || [];
+                if (!clients[data.restaurant_id].includes(ws)) {
+                    clients[data.restaurant_id].push(ws);
                 }
-                console.log(`number connect`, clients[data.restaurantId].length);
-                console.log(`Client registered for restaurantId=${data.restaurantId}`);
+                console.log(`number connect`, clients[data.restaurant_id].length);
+                console.log(`Client registered for restaurant_id=${data.restaurant_id}`);
             }
 
             // Nếu client gửi order / message
             if (data.order_id && data.restaurant_id) {
-                // broadcast tới tất cả client cùng restaurantId
+                // broadcast tới tất cả client cùng restaurant_id
                 const sockets = clients[data.restaurant_id] || [];
                 sockets.forEach((s) => s.send(JSON.stringify(data)));
                 console.log(`Broadcasted order ${data.order_id} to ${sockets.length} client(s)`);
