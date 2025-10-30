@@ -1,0 +1,7 @@
+version: 2
+  log_level: debug
+  tunnels:
+  websocket:
+      proto: http
+      addr: websocket-webpush-1:8081
+      domain: uncornered-seamus-nonnaturally.ngrok-free.dev
