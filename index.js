@@ -4,6 +4,10 @@ const wss = new WebSocketServer({ host: '0.0.0.0', port: 8081 });
 
 const clients = {};
 
+const TYPE_KOT = 'kot';
+const TYPE_WAITER = 'waiter';
+const TYPE_RESERVATION = 'reservation';
+
 wss.on('connection', (ws) => {
 
     ws.on('message', (msg) => {
@@ -34,17 +38,24 @@ wss.on('connection', (ws) => {
             }
 
             // type waiter
-            if (data.type === 'waiter') {
+            if (data.type === TYPE_WAITER) {
                 const sockets = clients[data.restaurant_id] || [];
                 sockets.forEach((s) => s.send(JSON.stringify(data)));
                 console.log(`Broadcasted waiter to ${sockets.length} client(s)`);
             }
 
             // type reservation
-            if (data.type === 'reservation') {
+            if (data.type === TYPE_RESERVATION) {
                 const sockets = clients[data.restaurant_id] || [];
                 sockets.forEach((s) => s.send(JSON.stringify(data)));
                 console.log(`Broadcasted reservation to ${sockets.length} client(s)`);
+            }
+
+            // type KOT
+            if (data.type === TYPE_KOT) {
+                const sockets = clients[data.restaurant_id] || [];
+                sockets.forEach((s) => s.send(JSON.stringify(data)));
+                console.log(`Broadcasted kot to ${sockets.length} client(s)`);
             }
             
         } catch (err) {
