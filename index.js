@@ -39,6 +39,14 @@ wss.on('connection', (ws) => {
                 sockets.forEach((s) => s.send(JSON.stringify(data)));
                 console.log(`Broadcasted waiter to ${sockets.length} client(s)`);
             }
+
+            // type reservation
+            if (data.type === 'reservation') {
+                const sockets = clients[data.restaurant_id] || [];
+                sockets.forEach((s) => s.send(JSON.stringify(data)));
+                console.log(`Broadcasted reservation to ${sockets.length} client(s)`);
+            }
+            
         } catch (err) {
             console.error('Invalid message', err);
         }
