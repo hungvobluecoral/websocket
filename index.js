@@ -3,10 +3,14 @@ import { WebSocketServer } from 'ws';
 const wss = new WebSocketServer({ host: '0.0.0.0', port: 8081 });
 
 const clients = {};
+const customer = {};
 
 const TYPE_KOT = 'kot';
 const TYPE_WAITER = 'waiter';
 const TYPE_RESERVATION = 'reservation';
+
+const TYPE_LOGIN = 'login';
+const TYPE_UPDATE = 'update';
 
 wss.on('connection', (ws) => {
 
@@ -26,7 +30,12 @@ wss.on('connection', (ws) => {
                     clients[data.restaurant_id].push(ws);
                 }
                 console.log(`number connect`, clients[data.restaurant_id].length);
-                console.log(`Client registered for restaurant_id=${data.restaurant_id}`);
+                console.log(`Client registered for restaurant_id=${data.restaurant_id}`);  
+            }
+
+            if (data.uuid && data.type === TYPE_LOGIN) {
+                customer[data.uuid] = ws;
+                console.log(`Customer registered with uuid=${data.uuid}`);
             }
 
             // Nếu client gửi order / message
@@ -57,6 +66,17 @@ wss.on('connection', (ws) => {
                 sockets.forEach((s) => s.send(JSON.stringify(data)));
                 console.log(`Broadcasted kot to ${sockets.length} client(s)`);
             }
+
+            // Handle 'update' type with uuid
+            if (data.type === TYPE_UPDATE && data.uuid) {
+                const targetClient = customer[data.uuid];
+                if (targetClient) {
+                    targetClient.send(JSON.stringify(data));
+                    console.log(`Sent update message to customer with uuid=${data.uuid}`);
+                } else {
+                    console.log(`Customer with uuid=${data.uuid} not found for update.`);
+                }
+            }
             
         } catch (err) {
             console.error('Invalid message', err);
@@ -69,6 +89,13 @@ wss.on('connection', (ws) => {
 
             clients[restId] = clients[restId].filter(s => s !== ws);
             console.log(`clients[${restId}]:`, clients[restId].length);
+        }
+        for (const uuid in customer) {
+            if (customer[uuid] === ws) {
+                delete customer[uuid];
+                console.log(`Customer with uuid=${uuid} disconnected`);
+                break;
+            }
         }
         console.log('Client disconnected');
     });
