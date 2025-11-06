@@ -9,6 +9,36 @@ The project uses `ws` as its WebSocket library. To install it, run:
 ```bash
 npm install ws
 ```
+
+It also uses `jest` for testing. To install Jest, run:
+
+```bash
+npm install --save-dev jest
+```
+
+### Testing with Jest
+
+This project uses Jest for comprehensive unit and integration testing. The test files are located in the `tests/` directory and are configured to run with `jest.config.js`.
+
+#### Running Tests
+
+To run all tests, execute the following command in your terminal:
+
+```bash
+npm test
+```
+
+#### Test Structure
+
+Tests are organized by the type of WebSocket message they handle, ensuring that each message type (`KOT`, `LOGIN`, `RESERVATION`, `UPDATE`, `WAITER`) and general WebSocket functionality are thoroughly validated.
+
+- `tests/KOT.test.js`: Tests for Kitchen Order Ticket (KOT) messages.
+- `tests/LOGIN.test.js`: Tests for customer login/registration messages.
+- `tests/RESERVATION.test.js`: Tests for reservation update messages.
+- `tests/UPDATE.test.js`: Tests for general update messages to specific customers.
+- `tests/WAITER.test.js`: Tests for waiter-related notifications.
+- `tests/websocket.test.js`: General WebSocket connection and server broadcast tests.
+
 ## 2. How to Use
 
 ### Server (`index.js`)
