@@ -1,16 +1,11 @@
 import { WebSocketServer } from 'ws';
 
+import { TYPE_KOT, TYPE_WAITER, TYPE_RESERVATION, TYPE_LOGIN, TYPE_UPDATE } from './const/index.js';
+
 const wss = new WebSocketServer({ host: '0.0.0.0', port: 8081 });
 
 const clients = {};
 const customer = {};
-
-const TYPE_KOT = 'kot';
-const TYPE_WAITER = 'waiter';
-const TYPE_RESERVATION = 'reservation';
-
-const TYPE_LOGIN = 'login';
-const TYPE_UPDATE = 'update';
 
 wss.on('connection', (ws) => {
 
